@@ -1,0 +1,99 @@
+<!doctype html>
+<!-- index.html hosts the embedded connection search and detail interface. -->
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Flow Audit</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header>
+    <div>
+      <p class="eyebrow">FLOW AUDIT</p>
+      <h1>连接审计</h1>
+    </div>
+    <div id="runtime-status" class="status">正在读取状态...</div>
+  </header>
+
+  <main>
+    <section class="panel search-panel">
+      <form id="search-form">
+        <label>开始时间
+          <input id="start" name="start" type="datetime-local">
+        </label>
+        <label>结束时间
+          <input id="end" name="end" type="datetime-local">
+        </label>
+        <label>协议
+          <select id="protocol" name="protocol">
+            <option value="">全部</option>
+            <option value="tcp">TCP</option>
+            <option value="udp">UDP</option>
+          </select>
+        </label>
+        <label>IP
+          <input id="ip" name="ip" type="text" placeholder="源或目标 IP">
+        </label>
+        <label>目标端口
+          <input id="dport" name="dport" type="number" min="1" max="65535" placeholder="443">
+        </label>
+        <label>状态
+          <select id="open" name="open">
+            <option value="">全部</option>
+            <option value="true">活跃</option>
+            <option value="false">已关闭</option>
+          </select>
+        </label>
+        <div class="actions">
+          <button type="submit">查询</button>
+          <button id="export-jsonl" type="button" class="secondary">导出 JSONL</button>
+          <button id="export-csv" type="button" class="secondary">导出 CSV</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="metrics">
+      <article><span>结果数</span><strong id="summary-count">0</strong></article>
+      <article><span>活跃连接</span><strong id="summary-open">0</strong></article>
+      <article><span>原方向字节</span><strong id="summary-original-bytes">0</strong></article>
+      <article><span>回复方向字节</span><strong id="summary-reply-bytes">0</strong></article>
+    </section>
+
+    <section class="content-grid">
+      <div class="panel table-panel">
+        <div class="panel-title">
+          <h2>连接记录</h2>
+          <button id="next-page" type="button" class="secondary hidden">下一页</button>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>最后观测</th>
+                <th>方向</th>
+                <th>协议</th>
+                <th>原方向 Tuple</th>
+                <th>目标端口</th>
+                <th>状态</th>
+                <th>原方向字节</th>
+                <th>回复字节</th>
+              </tr>
+            </thead>
+            <tbody id="flow-rows">
+              <tr><td colspan="8" class="empty">暂无数据</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <aside id="detail" class="panel detail-panel">
+        <h2>连接详情</h2>
+        <p class="empty">选择一条连接查看详情</p>
+      </aside>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>

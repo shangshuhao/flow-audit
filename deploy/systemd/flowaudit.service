@@ -1,0 +1,31 @@
+[Unit]
+Description=Flow Audit connection collector
+Documentation=https://github.com/
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/flowaudit run -config /etc/flow-audit/config.yaml
+Restart=on-failure
+RestartSec=5s
+StateDirectory=flow-audit
+RuntimeDirectory=flow-audit
+UMask=0077
+
+# Netfilter conntrack requires network administration privileges. The service
+# remains read-only with respect to conntrack entries and sysctl values.
+AmbientCapabilities=CAP_NET_ADMIN
+CapabilityBoundingSet=CAP_NET_ADMIN
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6 AF_NETLINK
+ReadWritePaths=/var/lib/flow-audit
+
+[Install]
+WantedBy=multi-user.target

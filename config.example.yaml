@@ -1,0 +1,32 @@
+node:
+  # Use "auto" to derive a stable identifier from /etc/machine-id.
+  id: auto
+
+source:
+  type: conntrack
+  include_preexisting: true
+  include_unreplied: true
+  queue_size: 4096
+  # Zero keeps the kernel default receive buffer.
+  netlink_receive_buffer: 0
+  reconnect_backoff: 3s
+
+store:
+  type: sqlite
+  path: /var/lib/flow-audit/flows.db
+  batch_size: 128
+  flush_interval: 1s
+  event_retention: 168h
+  flow_retention: 2160h
+
+http:
+  listen: 127.0.0.1:8080
+  # Set a bearer token before listening on a non-loopback address.
+  auth_token: ""
+
+log:
+  level: info
+  format: json
+
+metrics:
+  enabled: true
